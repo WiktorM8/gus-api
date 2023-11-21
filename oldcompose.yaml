@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: regonApi
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: apppass
+    ports:
+      - '5432:5432'
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php:latest
+    restart: unless-stopped
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+    ports:
+      - '9000:9000'
+    depends_on:
+      - database
+
+  apache:
+    image: httpd:latest
+    container_name: apache
+    restart: unless-stopped
+    ports:
+      - "8000:80" 
+    depends_on:
+    - php
+
+  

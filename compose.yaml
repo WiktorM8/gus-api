@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+      - ./docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+    expose:
+      - "9000"
+    entrypoint: /usr/local/bin/docker-entrypoint.sh
+    env_file:
+      - .env
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: regonApi
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: apppass
+    ports:
+      - "5432:5432"
+
+  webserver:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
+    ports:
+      - "80:80"
+
+  composer:
+    image: composer:2
+    volumes:
+      - .:/var/www/html
+    command: install
