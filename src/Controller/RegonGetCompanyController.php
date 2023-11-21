@@ -75,10 +75,8 @@ class RegonGetCompanyController extends AbstractController
                             'ApiError' => 'There is no company with provided regon number.'
                         ]);
                     }
-
                 }
             }
-            echo 'hello';
         }
     }
 }
