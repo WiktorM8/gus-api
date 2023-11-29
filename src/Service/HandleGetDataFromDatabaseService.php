@@ -38,7 +38,7 @@ class HandleGetDataFromDatabaseService
         return $data;
     }
 
-    public function handleRequest()
+    public function handleRequest() : array
     {
         try {
             $companies = $this->entityManager->getRepository(RegonData::class)->findAll();
