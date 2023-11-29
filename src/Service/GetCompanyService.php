@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Service;
 
@@ -7,6 +8,13 @@ use Symfony\Component\HttpClient\HttpClient;
 class GetCompanyService
 {
     private $getCompanyDataManagerService;
+
+    // User used to comunicate with Gus Regon API
+    protected $user = 'abcde12345abcde12345';
+
+    // Urls
+    protected $gusRegonApiLoginUrl = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj';
+    protected $gusRegonApiSearchDataUrl = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/daneSzukaj';
 
     public function __construct(GetCompanyDataManagerService $getCompanyDataManagerService)
     {
@@ -17,7 +25,7 @@ class GetCompanyService
 
     // creating and executing http requests
 
-    private function gusApiQuery(string $url, string $params, ?string $sid)
+    private function gusApiQuery(string $url, string $params, ?string $sid) : ?string
     {        
 
         $httpClient = HttpClient::create();
@@ -48,18 +56,18 @@ class GetCompanyService
 
     // Creating session
 
-    public function login(string $url, string $user)
+    public function login() : string
     {
         $params = json_encode([
-            'pKluczUzytkownika' => $user
+            'pKluczUzytkownika' => $this->user
         ]);
 
-        return $this->gusApiQuery($url, $params, null);
+        return $this->gusApiQuery($this->gusRegonApiLoginUrl, $params, null);
     }
 
     // Getting company info
 
-    public function getCompany(string $url, string $regon, $sid) : int
+    public function getCompany(string $regon, $sid) : int
     {
         $params = json_encode([
             'pParametryWyszukiwania' => [
@@ -67,7 +75,7 @@ class GetCompanyService
             ]
         ]);
 
-        $data = $this->gusApiQuery($url, $params, $sid);
+        $data = $this->gusApiQuery($this->gusRegonApiSearchDataUrl, $params, $sid);
         if (strlen($data) > 0) {
             return $this->getCompanyDataManagerService->uploadData($data);
         } else {

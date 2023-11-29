@@ -14,6 +14,20 @@ RUN apt-get update && \
     apt-get install -y postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
+COPY composer.json /var/www/html/
+COPY composer.lock /var/www/html/
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    unzip && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget https://getcomposer.org/installer -O composer-setup.php && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
+
+RUN composer install --no-interaction --no-scripts
+
 COPY .env /var/www/html/.env
 COPY nginx.conf /etc/nginx/nginx.conf
 
@@ -24,3 +38,5 @@ WORKDIR /var/www/html
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["php-fpm"]
+
+EXPOSE 8000

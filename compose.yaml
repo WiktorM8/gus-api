@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-      - ./docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      #- ./docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
     expose:
       - "9000"
-    entrypoint: /usr/local/bin/docker-entrypoint.sh
+    #entrypoint: /usr/local/bin/docker-entrypoint.sh
     env_file:
       - .env
 
@@ -29,10 +29,4 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
     ports:
-      - "80:80"
-
-  composer:
-    image: composer:2
-    volumes:
-      - .:/var/www/html
-    command: install
+      - "8000:80"

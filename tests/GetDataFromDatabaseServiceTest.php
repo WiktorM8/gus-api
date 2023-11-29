@@ -12,14 +12,14 @@ class GetDataFromDatabaseServiceTest extends TestCase
     {
         $company = new RegonData();
         $company->setRegon('123456789');
-        $company->setNazwa('Test Company');
-        $company->setWojewodztwo('Mazowieckie');
-        $company->setPowiat('Warszawa');
-        $company->setGmina('Warszawa');
-        $company->setMiejscowosc('Warszawa');
-        $company->setKodPocztowy('00-001');
-        $company->setUlica('ul. Testowa 1');
-        $company->setTyp('S.A.');
+        $company->setName('Test Company');
+        $company->setVoivodeship('Mazowieckie');
+        $company->setCounty('Warszawa');
+        $company->setCommune('Warszawa');
+        $company->setTown('Warszawa');
+        $company->setPostalCode('00-001');
+        $company->setStreet('ul. Testowa 1');
+        $company->setType('1');
         $company->setSilosID('ABC123');
 
         $companies = [$company];
@@ -31,14 +31,14 @@ class GetDataFromDatabaseServiceTest extends TestCase
         $expected = [
             [
                 'regon' => '123456789',
-                'nazwa' => 'Test Company',
-                'wojewodztwo' => 'Mazowieckie',
-                'powiat' => 'Warszawa',
-                'gmina' => 'Warszawa',
-                'miejscowosc' => 'Warszawa',
-                'kod_pocztowy' => '00-001',
-                'ulica' => 'ul. Testowa 1',
-                'typ' => 'S.A.',
+                'name' => 'Test Company',
+                'voivodeship' => 'Mazowieckie',
+                'county' => 'Warszawa',
+                'commune' => 'Warszawa',
+                'town' => 'Warszawa',
+                'postal_code' => '00-001',
+                'street' => 'ul. Testowa 1',
+                'type' => '1',
                 'silosID' => 'ABC123'
             ]
         ];

@@ -17,28 +17,28 @@ class RegonData
     private ?string $regon = null;
 
     #[ORM\Column(length: 120)]
-    private ?string $nazwa = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 40)]
-    private ?string $wojewodztwo = null;
+    private ?string $voivodeship = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $powiat = null;
+    private ?string $county = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $gmina = null;
+    private ?string $commune = null;
 
     #[ORM\Column(length: 43)]
-    private ?string $miejscowosc = null;
+    private ?string $town = null;
 
     #[ORM\Column(length: 6)]
-    private ?string $kod_pocztowy = null;
+    private ?string $postalCode = null;
 
     #[ORM\Column(length: 70)]
-    private ?string $ulica = null;
+    private ?string $street = null;
 
     #[ORM\Column(length: 2)]
-    private ?string $typ = null;
+    private ?string $type = null;
 
     #[ORM\Column(length: 1)]
     private ?string $silosID = null;
@@ -60,98 +60,98 @@ class RegonData
         return $this;
     }
 
-    public function getNazwa(): ?string
+    public function getName(): ?string
     {
-        return $this->nazwa;
+        return $this->name;
     }
 
-    public function setNazwa(string $nazwa): static
+    public function setName(string $name): static
     {
-        $this->nazwa = $nazwa;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getWojewodztwo(): ?string
+    public function getVoivodeship(): ?string
     {
-        return $this->wojewodztwo;
+        return $this->voivodeship;
     }
 
-    public function setWojewodztwo(string $wojewodztwo): static
+    public function setVoivodeship(string $voivodeship): static
     {
-        $this->wojewodztwo = $wojewodztwo;
+        $this->voivodeship = $voivodeship;
 
         return $this;
     }
 
-    public function getPowiat(): ?string
+    public function getCounty(): ?string
     {
-        return $this->powiat;
+        return $this->county;
     }
 
-    public function setPowiat(string $powiat): static
+    public function setCounty(string $county): static
     {
-        $this->powiat = $powiat;
+        $this->county = $county;
 
         return $this;
     }
 
-    public function getGmina(): ?string
+    public function getCommune(): ?string
     {
-        return $this->gmina;
+        return $this->commune;
     }
 
-    public function setGmina(string $gmina): static
+    public function setCommune(string $commune): static
     {
-        $this->gmina = $gmina;
+        $this->commune = $commune;
 
         return $this;
     }
 
-    public function getMiejscowosc(): ?string
+    public function getTown(): ?string
     {
-        return $this->miejscowosc;
+        return $this->town;
     }
 
-    public function setMiejscowosc(string $miejscowosc): static
+    public function setTown(string $town): static
     {
-        $this->miejscowosc = $miejscowosc;
+        $this->town = $town;
 
         return $this;
     }
 
-    public function getKodPocztowy(): ?string
+    public function getPostalCode(): ?string
     {
-        return $this->kod_pocztowy;
+        return $this->postalCode;
     }
 
-    public function setKodPocztowy(string $kod_pocztowy): static
+    public function setPostalCode(string $postalCode): static
     {
-        $this->kod_pocztowy = $kod_pocztowy;
+        $this->postalCode = $postalCode;
 
         return $this;
     }
 
-    public function getUlica(): ?string
+    public function getStreet(): ?string
     {
-        return $this->ulica;
+        return $this->street;
     }
 
-    public function setUlica(string $ulica): static
+    public function setStreet(string $street): static
     {
-        $this->ulica = $ulica;
+        $this->street = $street;
 
         return $this;
     }
 
-    public function getTyp(): ?string
+    public function getType(): ?string
     {
-        return $this->typ;
+        return $this->type;
     }
 
-    public function setTyp(string $typ): static
+    public function setType(string $type): static
     {
-        $this->typ = $typ;
+        $this->type = $type;
 
         return $this;
     }
