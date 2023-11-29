@@ -32,23 +32,19 @@ class GetDataFromDatabaseServiceTest extends TestCase
                     ->setSilosID(6)
             ]);
 
-        // Set up the expected calls for the entityManagerMock
         $entityManagerMock->expects($this->once())
             ->method('getRepository')
             ->with(RegonData::class)
             ->willReturn($repositoryMock);
 
-        // Create an instance of GetDataFromDatabaseService with the mocked EntityManagerInterface
-        $getDataService = new HandleGetDataFromDatabaseService($entityManagerMock);
+        $getDataFromDatabaseService = new HandleGetDataFromDatabaseService($entityManagerMock);
 
-        // Call the handleRequest method
-        $result = $getDataService->handleRequest();
+        $result = $getDataFromDatabaseService->handleRequest();
 
-        // Perform assertions based on the expected result
-        $this->assertEquals(['ApiResult', 
-        [
+        $this->assertEquals('ApiResult', $result[0]);
+        $this->assertEquals([ 0 => [
             "regon"=> "01077128000000",
-            "name"=> "\"UPS POLSKA\" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+            "name"=> '"UPS POLSKA" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ',
             "voivodeship"=> "MAZOWIECKIE",
             "county"=> "m. st. Warszawa",
             "commune"=> "Wola",
@@ -56,7 +52,8 @@ class GetDataFromDatabaseServiceTest extends TestCase
             "postal_code"=> "01-222",
             "street"=> "ul. Test-Krucza",
             "type"=> "P",
-            "silosID"=> "6"]
-        , Response::HTTP_OK], $result);
+            "silosID"=> "6"
+            ]] , $result[1]);
+        $this->assertEquals(Response::HTTP_OK, $result[2]);
     }
 }

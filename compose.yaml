@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-      #- ./docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      - ./docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
     expose:
       - "9000"
-    #entrypoint: /usr/local/bin/docker-entrypoint.sh
+    entrypoint: /usr/local/bin/docker-entrypoint.sh
     env_file:
       - .env
 
