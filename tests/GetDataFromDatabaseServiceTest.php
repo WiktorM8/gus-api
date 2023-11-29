@@ -1,48 +1,62 @@
 <?php
 
 namespace App\Tests\Service;
-
-use App\Entity\RegonData;
-use App\Service\GetDataFromDatabaseService;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Doctrine\Persistence\ObjectRepository;
+use App\Entity\RegonData;
+use App\Service\HandleGetDataFromDatabaseService;
+use Symfony\Component\HttpFoundation\Response;
 
 class GetDataFromDatabaseServiceTest extends TestCase
 {
-    public function testPrepareJsonResponse()
+    public function testHandleRequest()
     {
-        $company = new RegonData();
-        $company->setRegon('123456789');
-        $company->setName('Test Company');
-        $company->setVoivodeship('Mazowieckie');
-        $company->setCounty('Warszawa');
-        $company->setCommune('Warszawa');
-        $company->setTown('Warszawa');
-        $company->setPostalCode('00-001');
-        $company->setStreet('ul. Testowa 1');
-        $company->setType('1');
-        $company->setSilosID('ABC123');
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
 
-        $companies = [$company];
+        $repositoryMock = $this->createMock(ObjectRepository::class);
 
-        $getDataFromDatabaseService = new GetDataFromDatabaseService();
+        $repositoryMock->expects($this->once())
+            ->method('findAll')
+            ->willReturn([
+                (new RegonData())
+                    ->setRegon('01077128000000')
+                    ->setName('"UPS POLSKA" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ')
+                    ->setVoivodeship('MAZOWIECKIE')
+                    ->setCounty('m. st. Warszawa')
+                    ->setCommune('Wola')
+                    ->setTown('Warszawa')
+                    ->setPostalCode('01-222')
+                    ->setStreet('ul. Test-Krucza')
+                    ->setType('P')
+                    ->setSilosID(6)
+            ]);
 
-        $result = $getDataFromDatabaseService->prepareJsonResponse($companies);
+        // Set up the expected calls for the entityManagerMock
+        $entityManagerMock->expects($this->once())
+            ->method('getRepository')
+            ->with(RegonData::class)
+            ->willReturn($repositoryMock);
 
-        $expected = [
-            [
-                'regon' => '123456789',
-                'name' => 'Test Company',
-                'voivodeship' => 'Mazowieckie',
-                'county' => 'Warszawa',
-                'commune' => 'Warszawa',
-                'town' => 'Warszawa',
-                'postal_code' => '00-001',
-                'street' => 'ul. Testowa 1',
-                'type' => '1',
-                'silosID' => 'ABC123'
-            ]
-        ];
+        // Create an instance of GetDataFromDatabaseService with the mocked EntityManagerInterface
+        $getDataService = new HandleGetDataFromDatabaseService($entityManagerMock);
 
-        $this->assertEquals($expected, $result);
+        // Call the handleRequest method
+        $result = $getDataService->handleRequest();
+
+        // Perform assertions based on the expected result
+        $this->assertEquals(['ApiResult', 
+        [
+            "regon"=> "01077128000000",
+            "name"=> "\"UPS POLSKA\" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+            "voivodeship"=> "MAZOWIECKIE",
+            "county"=> "m. st. Warszawa",
+            "commune"=> "Wola",
+            "town"=> "Warszawa",
+            "postal_code"=> "01-222",
+            "street"=> "ul. Test-Krucza",
+            "type"=> "P",
+            "silosID"=> "6"]
+        , Response::HTTP_OK], $result);
     }
 }

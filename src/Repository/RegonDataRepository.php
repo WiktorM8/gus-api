@@ -21,12 +21,14 @@ class RegonDataRepository extends ServiceEntityRepository
         parent::__construct($registry, RegonData::class);
     }
 
-    public function findCompanyWithRegon(string $regon) : array
+    public function findCompanyByRegon(string $regon) : RegonData
     {
         return $this->createQueryBuilder('regonData')
-            ->where("regonData.regon = $regon")
+            ->where("regonData.regon = :regon")
+            ->setParameter('regon', $regon)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
 //    /**

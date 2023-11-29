@@ -5,7 +5,6 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedJsonResponse;
 
 class HandleGetCompanyService
 {

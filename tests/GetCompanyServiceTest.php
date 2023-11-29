@@ -12,10 +12,7 @@ class GetCompanyServiceTest extends TestCase
 
         $getCompanyService = new GetCompanyService($getCompanyDataManagerServiceMock);
 
-        $realUrl = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj';
-        $realUser = 'abcde12345abcde12345';
-
-        $result = $getCompanyService->login($realUrl, $realUser);
+        $result = $getCompanyService->login();
 
         $this->assertNotEmpty($result);
     }
@@ -26,18 +23,14 @@ class GetCompanyServiceTest extends TestCase
 
         $getCompanyService = new GetCompanyService($getCompanyDataManagerServiceMock);
 
-        $realUrl = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/daneSzukaj';
         $realRegon = '331399589';
-        $realSid = $getCompanyService->login(
-            'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj',
-            'abcde12345abcde12345'
-        );
+        $realSid = $getCompanyService->login();
 
         $getCompanyDataManagerServiceMock->expects($this->once())
             ->method('uploadData')
-            ->willReturn(true);
+            ->willReturn(1);
 
-        $result = $getCompanyService->getCompany($realUrl, $realRegon, $realSid);
+        $result = $getCompanyService->getCompany($realRegon, $realSid);
 
         $this->assertEquals(1, $result);
     }

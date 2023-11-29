@@ -67,7 +67,7 @@ class GetCompanyService
 
     // Getting company info
 
-    public function getCompany(string $regon, $sid) : int
+    public function getCompany(string $regon, ?string $sid) : int
     {
         $params = json_encode([
             'pParametryWyszukiwania' => [

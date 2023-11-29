@@ -5,7 +5,6 @@ namespace App\Service;
 
 use App\Entity\RegonData;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -24,20 +23,26 @@ class GetCompanyDataManagerService
         return $xmlEncoder->decode($data, 'xml');
     }
 
+    private function setEntityProperties(RegonData $entityRegonData, array $xmlDecodedData) : void
+    {
+        $entityRegonData->setRegon($xmlDecodedData['dane']['Regon']);
+        $entityRegonData->setName($xmlDecodedData['dane']['Nazwa']);
+        $entityRegonData->setVoivodeship($xmlDecodedData['dane']['Wojewodztwo']);
+        $entityRegonData->setCounty($xmlDecodedData['dane']['Powiat']);
+        $entityRegonData->setCommune($xmlDecodedData['dane']['Gmina']);
+        $entityRegonData->setTown($xmlDecodedData['dane']['Miejscowosc']);
+        $entityRegonData->setPostalCode($xmlDecodedData['dane']['KodPocztowy']);
+        $entityRegonData->setStreet($xmlDecodedData['dane']['Ulica']);
+        $entityRegonData->setType($xmlDecodedData['dane']['Typ']);
+        $entityRegonData->setSilosID($xmlDecodedData['dane']['SilosID']);
+    }
+
     private function insertToDatabase(array $xmlDecodedData) : int
     {
         try {
             $entityRegonData = new RegonData();
-            $entityRegonData->setRegon($xmlDecodedData['dane']['Regon']);
-            $entityRegonData->setName($xmlDecodedData['dane']['Nazwa']);
-            $entityRegonData->setVoivodeship($xmlDecodedData['dane']['Wojewodztwo']);
-            $entityRegonData->setCounty($xmlDecodedData['dane']['Powiat']);
-            $entityRegonData->setCommune($xmlDecodedData['dane']['Gmina']);
-            $entityRegonData->setTown($xmlDecodedData['dane']['Miejscowosc']);
-            $entityRegonData->setPostalCode($xmlDecodedData['dane']['KodPocztowy']);
-            $entityRegonData->setStreet($xmlDecodedData['dane']['Ulica']);
-            $entityRegonData->setType($xmlDecodedData['dane']['Typ']);
-            $entityRegonData->setSilosID($xmlDecodedData['dane']['SilosID']);
+            
+            $this->setEntityProperties($entityRegonData, $xmlDecodedData);
 
             $this->entityManager->persist($entityRegonData);
             $this->entityManager->flush();
@@ -53,19 +58,12 @@ class GetCompanyDataManagerService
     private function updateDatabase(array $xmlDecodedData) : int
     {
         try {
-            $existingEntity = $this->entityManager->getRepository(RegonData::class)->findCompanyWithRegon($xmlDecodedData['dane']['Regon']);
+            $existingEntity = $this->entityManager->getRepository(RegonData::class)->findCompanyByRegon($xmlDecodedData['dane']['Regon']);
 
             if ($existingEntity instanceof RegonData) {
-                $existingEntity->setName($xmlDecodedData['dane']['Nazwa']);
-                $existingEntity->setVoivodeship($xmlDecodedData['dane']['Wojewodztwo']);
-                $existingEntity->setCounty($xmlDecodedData['dane']['Powiat']);
-                $existingEntity->setCommune($xmlDecodedData['dane']['Gmina']);
-                $existingEntity->setTown($xmlDecodedData['dane']['Miejscowosc']);
-                $existingEntity->setPostalCode($xmlDecodedData['dane']['KodPocztowy']);
-                $existingEntity->setStreet($xmlDecodedData['dane']['Ulica']);
-                $existingEntity->setType($xmlDecodedData['dane']['Typ']);
-                $existingEntity->setSilosID($xmlDecodedData['dane']['SilosID']);
 
+                $this->setEntityProperties($existingEntity, $xmlDecodedData);
+                
                 $this->entityManager->flush();
 
                 // Everything is fine

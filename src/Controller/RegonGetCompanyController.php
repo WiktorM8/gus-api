@@ -3,11 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Service\GetCompanyService;
 use App\Service\HandleGetCompanyService;
-use App\Service\VerifyRegonService;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedJsonResponse;
@@ -33,13 +29,13 @@ class RegonGetCompanyController extends AbstractController
     {
         $regon = $request->query->get('regon');
 
-        $result  = $this->handleGetCompanyService->handleRequest($regon);
+        $result = $this->handleGetCompanyService->handleRequest($regon);
 
         // $result = [My api response name, My api response message, http status code]
         return new StreamedJsonResponse([
             $result[0] => $result[1]
         ], $result[2]
-    );
+        );
 
     }
 }
