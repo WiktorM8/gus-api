@@ -13,13 +13,11 @@ class HandleGetCompanyService
 
     protected $getCompanyService;
     protected $verifyRegonService;
-    protected $entityManager;
 
-    public function __construct(GetCompanyService $getCompanyService, VerifyRegonService $verifyRegonService, EntityManagerInterface $entityManager)
+    public function __construct(GetCompanyService $getCompanyService, VerifyRegonService $verifyRegonService)
     {
         $this->getCompanyService = $getCompanyService;
         $this->verifyRegonService = $verifyRegonService;
-        $this->entityManager = $entityManager;
     }
 
     public function handleRequest(string $regon) : array
